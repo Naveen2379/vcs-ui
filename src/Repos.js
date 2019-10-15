@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {isEmpty} from "lodash"
+import {isEmpty, reduce, extend} from "lodash"
 import { Button } from 'react-bootstrap';
 
 function convertJSON(response) {
@@ -13,6 +13,7 @@ class Repos extends React.Component {
         this.state = {
             userName: "",
             userRepos: [],
+            userRepoWithLang: {}
         };
         this.userInput = this.userInput.bind(this);
         this.constructUrlForUsername = this.constructUrlForUsername.bind(this);
@@ -30,14 +31,24 @@ class Repos extends React.Component {
     }
 
     saveUserRepos(jsonResp) {
-        console.log(jsonResp);
+        console.log("1", jsonResp);
+        Promise.all(
+            jsonResp.map(userRepo => fetch(userRepo.languages_url)
+                    .then(response =>
+                        response.json().then(languages => {
+                            return {[userRepo.name]: languages}
+                        }))
+            )
+        ).then(data => {
+            const newData = reduce(data, extend);
+            this.setState({userRepoWithLang: newData})
+        });
+
         this.setState(
             {
                 userRepos: jsonResp,
             }
         );
-
-
     }
 
     fetchReposAPI() {
@@ -48,11 +59,20 @@ class Repos extends React.Component {
             .then(this.saveUserRepos)
     }
 
-    renderRepos(userRepos) {
-        if(isEmpty(userRepos)) {
+    renderRepos(reposLang) {
+        if(isEmpty(reposLang)) {
             return ""
         }
-        return userRepos.map(repo => <h1>{repo.name}</h1>)
+
+        function repoAndLang(key) {
+            return <div key={key}>
+                <h1>{key}</h1>
+                {Object.keys(reposLang[key]).map(lang => <h3 key={lang}>{lang}</h3>)}
+            </div>;
+        }
+
+        return Object.keys(reposLang).map(repoAndLang);
+        // return reposLang.map(repo => <h1>{repo.name}</h1>)
     }
 
 
@@ -63,7 +83,7 @@ class Repos extends React.Component {
             </label>
             <Button onClick={this.fetchReposAPI}>Submit</Button>
             <img src={isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.avatar_url} alt="No Image"/>
-            {this.renderRepos(this.state.userRepos)}
+            {this.renderRepos(this.state.userRepoWithLang)}
         </div>
     }
 }

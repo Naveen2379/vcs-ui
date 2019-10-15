@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {isEmpty} from "lodash"
+import { Button } from 'react-bootstrap';
 
 function convertJSON(response) {
     return response.json();
@@ -60,7 +61,7 @@ class Repos extends React.Component {
             <label> Enter username
                 <input type="text" value={this.state.userName} onChange={this.userInput}/>
             </label>
-            <button onClick={this.fetchReposAPI}>Submit</button>
+            <Button onClick={this.fetchReposAPI}>Submit</Button>
             <img src={isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.avatar_url} alt="No Image"/>
             {this.renderRepos(this.state.userRepos)}
         </div>

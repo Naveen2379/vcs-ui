@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import {isEmpty, reduce, extend} from "lodash"
+import {isEmpty, reduce, extend, pickBy} from "lodash"
 import { Button, Form, FormControl, FormGroup, FormLabel, Col, Row, Container, Table,  Dropdown, DropdownButton} from 'react-bootstrap';
 import './Repos.css';
 import Trending from "./Trending";
@@ -19,12 +19,14 @@ class Repos extends React.Component {
             userName: "",
             userRepos: [],
             userRepoWithLang: {},
+            languages: []
         };
         this.userInput = this.userInput.bind(this);
         this.constructUrlForUsername = this.constructUrlForUsername.bind(this);
         this.fetchReposAPI = this.fetchReposAPI.bind(this);
         this.saveUserRepos = this.saveUserRepos.bind(this);
         this.renderRepos = this.renderRepos.bind(this);
+        this.onSelectDropdown = this.onSelectDropdown.bind(this);
     }
 
     userInput(event) {
@@ -45,7 +47,10 @@ class Repos extends React.Component {
             )
         ).then(data => {
             const newData = reduce(data, extend);
-            this.setState({userRepoWithLang: newData})
+            const languages = Object.values(newData).map(language => Object.keys(language)).flatMap(x => x);
+            const uniqueLang = Array.from(new Set(languages));
+            this.setState({languages: uniqueLang});
+            this.setState({userRepoWithLang: newData});
         });
 
         this.setState(
@@ -110,16 +115,25 @@ class Repos extends React.Component {
             <Col sm='5'>
                 {isEmpty(this.state.userRepoWithLang) ? "" : repoLangTable}
             </Col>
-            <Col className="dropDown">
+            <Col>
                 <DropdownButton id="dropdown-item-button" title="Dropdown button">
-                <Dropdown.Item as="button">Action</Dropdown.Item>
-                <Dropdown.Item as="button">Another action</Dropdown.Item>
-                <Dropdown.Item as="button">Something else</Dropdown.Item>
+                    {this.state.languages.map(language =>
+                        <Dropdown.Item as="button" key={language}
+                                       onSelect={() => this.onSelectDropdown(language)}>{language}
+                        </Dropdown.Item>)
+                    }
                 </DropdownButton>
             </Col>
             </Row>
         </Container>
 
+    }
+
+    onSelectDropdown(language) {
+        const newReposWithLang = pickBy(this.state.userRepoWithLang, function(value, key, object) {
+            return Object.keys(value).includes(language);
+        });
+        this.setState({userRepoWithLang: newReposWithLang});
     }
 }
 export default Repos;

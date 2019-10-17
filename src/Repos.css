@@ -1,0 +1,56 @@
+.containerClass {
+    
+}
+.rowClass {
+    background-color: darkgray;
+    max-width: 100%;
+    padding-bottom: 10px;
+    padding-top: 20px;
+}
+
+
+.columnChange {
+    margin-left: 100px;
+}
+
+.RepoBold {
+    font-weight: bold;
+}
+
+.formControl {
+    margin-left: 350px;
+    margin-top: 10px;
+}
+
+.langStyle {
+    line-height: 1px;
+    font-size: 10px;
+}
+
+.imgLeft {
+    text-align: left !important;
+}
+
+.imgRepos {
+    background-color: palegoldenrod;
+    max-width: 100%;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.ReposLangStyle {
+    line-height: 1px;
+}
+.renderRepos {
+    font-size: 10px;
+}
+
+.imgDisplay {
+    height: 200px;
+    width: 200px;
+    border-style: solid;
+    border-color: lightblue;    
+}
+
+.dropDown {
+    display: none;
+}

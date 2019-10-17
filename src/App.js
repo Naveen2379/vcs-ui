@@ -4,11 +4,12 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Repos from "./Repos";
+import TrendingLang from "./TrendingLang";
 
 function App() {
   return (
     <div className="App">
-      <Repos/>
+      <Repos />
     </div>
   );
 }

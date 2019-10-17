@@ -1,38 +1,31 @@
-
-
 import React from 'react';
 
 import {isEmpty, reduce, extend} from "lodash"
-import { Button, Form, FormControl, FormGroup, FormLabel, Col, Row, Container, Table,  Dropdown, DropdownButton} from 'react-bootstrap';
-import './Repos.css';
-
+import { Button, Form, FormControl, FormGroup, FormLabel, Col, Row, Container, Table } from 'react-bootstrap';
+import './TrendingLang.css';
 
 function convertJSON(response) {
     return response.json();
 }
 
-class Repos extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+class TrendingLang extends React.Component {
+	constructor (props) {
+		super(props);
+		this.state = {
             userName: "",
             userRepos: [],
-            userRepoWithLang: {},
-            trendRepo: []
+            userRepoWithLang: {}
         };
         this.userInput = this.userInput.bind(this);
         this.constructUrlForUsername = this.constructUrlForUsername.bind(this);
         this.fetchReposAPI = this.fetchReposAPI.bind(this);
         this.saveUserRepos = this.saveUserRepos.bind(this);
         this.renderRepos = this.renderRepos.bind(this);
-        this.trendingRepos = this.trendingRepos.bind(this);
-        //this.showTrendingRepos = this.showTrendingRepos.bind(this);
-    }
+        //this.renderPieChart = this.renderPieChart.bind(this);
+        
+	}
 
-    componentDidMount() {
-        this.trendingRepos();
-    }
-    userInput(event) {
+	userInput(event) {
         this.setState({userName: event.target.value});
     }
 
@@ -52,13 +45,14 @@ class Repos extends React.Component {
         ).then(data => {
             const newData = reduce(data, extend);
             this.setState({userRepoWithLang: newData})
+            //console.log(this.state.userRepoWithLang);
         });
 
-        this.setState(
+        /*this.setState(
             {
                 userRepos: jsonResp,
             }
-        );
+        );*/
     }
 
     fetchReposAPI() {
@@ -69,35 +63,40 @@ class Repos extends React.Component {
             .then(this.saveUserRepos)
     }
 
+    /*renderPieChart() {
+    	//console.log('renderPieChart');
+
+    	return 'Naveen'
+    }*/
+
     renderRepos(reposLang) {
+    	console.log(reposLang)
+    	//console.log(this.state.userRepoWithLang);
         if(isEmpty(reposLang)) {
             return ""
         }
 
+        
+
         function repoAndLang(key) {
-            return <tr key={key}><td className="RepoBold">{key}</td><td className="langStyle">{Object.keys(reposLang[key]).map(lang => <p key={lang}>{lang}</p>)}</td></tr>
+        	console.log(key);
+
+            return key.map(val => console.log(val));
         }
 
-        return Object.keys(reposLang).map(repoAndLang);
-        //return reposLang.map(repo => <h1>{repo.name}</h1>)
-    }
+		/*function langValue(key1) {
+			console.log(key1);
+        	return 	<div>{Object.keys(langValue[key1]).map(val => <p>{val}</p>)}</div>
+        }*/
 
-    trendingRepos() {
-        const trendRepoUrl = 'https://github-trending-api.now.sh/repositories';
-        fetch(trendRepoUrl)
-        .then(response => response.json())
-        .then(json => this.setState({
-            trendRepo: json
-        }))
-
-        this.state.trendRepo.map(trendReposUrl => console.log(this.state.trendRepo.url))
+        return Object.keys(reposLang)//.map((key, val) => console.log(key, val));
+        //return Object.keys(reposLang).map(repos => console.log(repos));
         
     }
 
-    render() {
-        const repoLangTable =  <Table striped bordered hover>
-                                <tbody>{this.renderRepos(this.state.userRepoWithLang)}</tbody>
-                                </Table>;
+
+	render() {
+
         return <Container className="containerClass">
             <Row className="rowClass">
                 <Col>
@@ -116,30 +115,16 @@ class Repos extends React.Component {
                 </Form>
                 </Col>
             </Row>
-            <Row>
-                <Col>
-                <h2>Trending repositories</h2>
-                <p>{isEmpty(this.state.trendRepo) ? "" : {element}}</p>
-                </Col>
-            </Row>
             <Row className="imgRepos">
-            <Col className="imgLeft">
-                {isEmpty(this.state.userRepos) ? "" : <img className="imgDisplay" src={isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.avatar_url}/>}
-                <h5>{isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.login}</h5>
-            </Col>
-            <Col sm='5'>
-                {isEmpty(this.state.userRepoWithLang) ? "" : repoLangTable}
-            </Col>
-            <Col className="dropDown">
-                <DropdownButton id="dropdown-item-button" title="Dropdown button">
-                <Dropdown.Item as="button">Action</Dropdown.Item>
-                <Dropdown.Item as="button">Another action</Dropdown.Item>
-                <Dropdown.Item as="button">Something else</Dropdown.Item>
-                </DropdownButton>
+            <Col>
+            	<p>Language Percentage</p>
+            	{this.renderRepos(this.state.userRepoWithLang)}
             </Col>
             </Row>
         </Container>
 
     }
 }
-export default Repos;
+
+
+export default TrendingLang;

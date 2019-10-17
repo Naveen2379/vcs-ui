@@ -5,6 +5,7 @@ import React from 'react';
 import {isEmpty, reduce, extend} from "lodash"
 import { Button, Form, FormControl, FormGroup, FormLabel, Col, Row, Container, Table,  Dropdown, DropdownButton} from 'react-bootstrap';
 import './Repos.css';
+import Trending from "./Trending";
 
 
 function convertJSON(response) {
@@ -18,20 +19,14 @@ class Repos extends React.Component {
             userName: "",
             userRepos: [],
             userRepoWithLang: {},
-            trendRepo: []
         };
         this.userInput = this.userInput.bind(this);
         this.constructUrlForUsername = this.constructUrlForUsername.bind(this);
         this.fetchReposAPI = this.fetchReposAPI.bind(this);
         this.saveUserRepos = this.saveUserRepos.bind(this);
         this.renderRepos = this.renderRepos.bind(this);
-        this.trendingRepos = this.trendingRepos.bind(this);
-        //this.showTrendingRepos = this.showTrendingRepos.bind(this);
     }
 
-    componentDidMount() {
-        this.trendingRepos();
-    }
     userInput(event) {
         this.setState({userName: event.target.value});
     }
@@ -41,7 +36,6 @@ class Repos extends React.Component {
     }
 
     saveUserRepos(jsonResp) {
-        console.log("1", jsonResp);
         Promise.all(
             jsonResp.map(userRepo => fetch(userRepo.languages_url)
                 .then(response =>
@@ -79,19 +73,6 @@ class Repos extends React.Component {
         }
 
         return Object.keys(reposLang).map(repoAndLang);
-        //return reposLang.map(repo => <h1>{repo.name}</h1>)
-    }
-
-    trendingRepos() {
-        const trendRepoUrl = 'https://github-trending-api.now.sh/repositories';
-        fetch(trendRepoUrl)
-        .then(response => response.json())
-        .then(json => this.setState({
-            trendRepo: json
-        }))
-
-        this.state.trendRepo.map(trendReposUrl => console.log(this.state.trendRepo.url))
-        
     }
 
     render() {
@@ -118,8 +99,7 @@ class Repos extends React.Component {
             </Row>
             <Row>
                 <Col>
-                <h2>Trending repositories</h2>
-                <p>{isEmpty(this.state.trendRepo) ? "" : {element}}</p>
+                    {isEmpty(this.state.userRepos) ? <Trending />: ""}
                 </Col>
             </Row>
             <Row className="imgRepos">

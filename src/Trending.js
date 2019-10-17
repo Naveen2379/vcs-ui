@@ -28,8 +28,20 @@ class Trending extends React.Component{
     }
 
     showTrendingRepos() {
+        function showRepo(repo) {
+            return <div>
+                <img src={repo.avatar}/>
+                <h1>{repo.name}</h1>
+                <h1>{repo.author}</h1>
+                <h1>{repo.stars}</h1>
+                <h1>{repo.language}</h1>
+            </div>
+        }
+
         return (
-            <h1>{this.state.trendRepo[0].name}</h1>
+            <div>
+                {this.state.trendRepo.map(repo => showRepo(repo))}
+            </div>
         );
     }
 

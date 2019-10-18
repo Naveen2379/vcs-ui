@@ -95,7 +95,7 @@ class Repos extends React.Component {
                         <Form.Control type="text" placeholder="Enter username" onChange={this.userInput}/>
                         </Col>
                         <Col sm="2">
-                            <Button variant="primary" size="sm" onClick={this.fetchReposAPI}>Submit</Button>
+                            <Button variant="primary" size="md" onClick={this.fetchReposAPI}>Submit</Button>
                         </Col>
                     </Form.Group>
                 </Col>

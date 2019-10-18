@@ -1,6 +1,9 @@
 import React from 'react';
 
-import {isEmpty} from "lodash"
+import {Col, Row, Table} from "react-bootstrap";
+import {isEmpty} from "lodash";
+import "./Trending.css";
+
 
 class Trending extends React.Component{
     constructor(props) {
@@ -29,27 +32,31 @@ class Trending extends React.Component{
 
     showTrendingRepos() {
         function showRepo(repo) {
-            return <div>
-                <img src={repo.avatar}/>
-                <h1>{repo.name}</h1>
-                <h1>{repo.author}</h1>
-                <h1>{repo.stars}</h1>
-                <h1>{repo.language}</h1>
-            </div>
+            return <tr key={repo.name}>
+                <td sm='0.5'>
+                <img height="100px" width="100px" src={repo.avatar}/>
+                </td><Col>
+                    <Row><td width="980px"><b>Repo Name - </b>{repo.name}</td></Row>
+                    <Row><td width="980px"><b>Author - </b>{repo.author}</td></Row>
+                    <Row><td width="980px"><b>Stars - </b>{repo.stars}</td></Row>
+                    <Row><td width="980px"><b>Language - </b>{repo.language}</td></Row>
+            </Col>
+
+
+
+            </tr>
         }
 
         return (
-            <div>
-                {this.state.trendRepo.map(repo => showRepo(repo))}
-            </div>
+                <tbody className="tableStyle">{this.state.trendRepo.map(repo => showRepo(repo))}</tbody>
         );
     }
 
     render() {
         return (
-            <div>
+            <Table striped bordered hovered>
                 {isEmpty(this.state.trendRepo) ? "": this.showTrendingRepos()}
-            </div>
+            </Table>
         );
     }
 }

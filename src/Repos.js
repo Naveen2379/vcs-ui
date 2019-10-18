@@ -102,10 +102,8 @@ class Repos extends React.Component {
                 </Form>
                 </Col>
             </Row>
-            <Row>
-                <Col>
+            <Row className="tableAdjust">
                     {isEmpty(this.state.userRepos) ? <Trending />: ""}
-                </Col>
             </Row>
             <Row className="imgRepos">
             <Col className="imgLeft">

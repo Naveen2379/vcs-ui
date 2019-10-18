@@ -33,13 +33,13 @@ class Trending extends React.Component{
     showTrendingRepos() {
         function showRepo(repo) {
             return <tr key={repo.name}>
-                <td sm='3'>
+                <td sm='1'>
                 <img className="img" height="100px" width="100px" src={repo.avatar}/>
                 </td><Col className="repoDetails">
-                    <Row><td width="400px"><b>{repo.name}</b></td></Row>
-                    <Row><td width="400px">{repo.author}</td></Row>
-                    <Row><td width="400px">{repo.stars}</td></Row>
-                    <Row><td width="400px">{repo.language}</td></Row>
+                    <Row><td width="350px"><b>{repo.name}</b></td></Row>
+                    <Row><td width="350px">{repo.author}</td></Row>
+                    <Row><td width="350px">{repo.stars}</td></Row>
+                    <Row><td width="350px">{repo.language}</td></Row>
             </Col>
             </tr>
         }

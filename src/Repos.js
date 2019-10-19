@@ -19,6 +19,7 @@ class Repos extends React.Component {
             userName: "",
             userRepos: [],
             userRepoWithLang: {},
+            userRepoOnSelectLang: {},
             languages: []
         };
         this.userInput = this.userInput.bind(this);
@@ -50,7 +51,7 @@ class Repos extends React.Component {
             const languages = Object.values(newData).map(language => Object.keys(language)).flatMap(x => x);
             const uniqueLang = Array.from(new Set(languages));
             this.setState({languages: uniqueLang});
-            this.setState({userRepoWithLang: newData});
+            this.setState({userRepoWithLang: newData, userRepoOnSelectLang: ""});
         });
 
         this.setState(
@@ -84,6 +85,9 @@ class Repos extends React.Component {
         const repoLangTable =  <Table striped bordered hover>
                                 <tbody>{this.renderRepos(this.state.userRepoWithLang)}</tbody>
                                 </Table>;
+        const repoOnSelectLangTable =  <Table striped bordered hover>
+                                <tbody>{this.renderRepos(this.state.userRepoOnSelectLang)}</tbody>
+                                </Table>;
         return <Container className="containerClass">
             <Row className="rowClass">
                 <Col>
@@ -111,16 +115,17 @@ class Repos extends React.Component {
                 <h5>{isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.login}</h5>
             </Col>
             <Col sm='5'>
-                {isEmpty(this.state.userRepoWithLang) ? "" : repoLangTable}
+                {isEmpty(this.state.userRepoOnSelectLang) ? repoLangTable : repoOnSelectLangTable }
             </Col>
             <Col>
-                <DropdownButton id="dropdown-item-button" title="Dropdown button">
+                {isEmpty(this.state.languages) ? "" : <DropdownButton id="dropdown-item-button" title="Choose Language">
                     {this.state.languages.map(language =>
-                        <Dropdown.Item as="button" key={language}
+                        <Dropdown.Item as="button" className="colorBtn" key={language}
                                        onSelect={() => this.onSelectDropdown(language)}>{language}
                         </Dropdown.Item>)
                     }
-                </DropdownButton>
+                </DropdownButton>}
+
             </Col>
             </Row>
         </Container>
@@ -131,7 +136,7 @@ class Repos extends React.Component {
         const newReposWithLang = pickBy(this.state.userRepoWithLang, function(value, key, object) {
             return Object.keys(value).includes(language);
         });
-        this.setState({userRepoWithLang: newReposWithLang});
+        this.setState({userRepoOnSelectLang: newReposWithLang});
     }
 }
 export default Repos;

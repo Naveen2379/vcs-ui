@@ -1,0 +1,47 @@
+.tableStyle {
+    line-height: 0.4rem;
+    font-size: 0.8rem;
+}
+
+.table {
+    border: 2px solid green;
+    border-radius: 50px;
+
+}
+.table td {
+    border-top: none !important;
+    padding: 0.75rem;
+
+}
+
+.dropdown-item {
+    background-color: darkgrey;
+}
+
+.dropdown-item {
+    background-color: lavender;
+}
+
+.dropdown-item:hover {
+    background-color: aliceblue;
+}
+
+.dropdown-menu {
+    padding: 0rem;
+    mid-width: 11rem;
+}
+
+.table tr {
+    outline-color: red;
+}
+.tableAdjust {
+    width: 1110px;
+}
+
+.repoDetails {
+    text-align: left;
+}
+
+.img {
+    border-radius: 10px;
+}

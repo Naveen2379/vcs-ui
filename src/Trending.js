@@ -50,13 +50,12 @@ class Trending extends React.Component{
             </td>
 
 
+
             /*if((ind+1)%2 === 0){
                 return <tr>{tableData}</tr>
             };*/
 
             return <tr>{tableData}</tr>
-
-
         }
 
         return (

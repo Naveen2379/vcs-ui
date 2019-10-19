@@ -4,8 +4,8 @@
 }
 
 .table {
-    border: 2px solid green;
-    border-radius: 50px;
+    border: 1px solid green;
+    border-radius: 10px;
 
 }
 .table td {

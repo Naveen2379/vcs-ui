@@ -90,21 +90,16 @@ class Repos extends React.Component {
                                 </Table>;
         return <Container className="containerClass">
             <Row className="rowClass">
-                <Col>
                 <Form>
-                    <Col className="columnChange">
                     <Form.Group as={Row}>
-                    <Form.Label column sm="2"> Username </Form.Label>
-                        <Col sm="5">
-                        <Form.Control type="text" placeholder="Enter username" onChange={this.userInput}/>
+                        <Col sm="8">
+                        <Form.Control type="text" placeholder="Enter Username..." onChange={this.userInput}/>
                         </Col>
                         <Col sm="2">
                             <Button variant="primary" size="md" onClick={this.fetchReposAPI}>Submit</Button>
                         </Col>
                     </Form.Group>
-                </Col>
                 </Form>
-                </Col>
             </Row>
             <Row className="tableAdjust">
                     {isEmpty(this.state.userRepos) ? <Trending />: ""}

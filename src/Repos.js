@@ -75,7 +75,7 @@ class Repos extends React.Component {
         }
 
         function repoAndLang(key) {
-            return <tr key={key}><td className="RepoBold">{key}</td><td className="langStyle">{Object.keys(reposLang[key]).map(lang => <p key={lang}>{lang}</p>)}</td></tr>
+            return <tr key={key}><td className="RepoBold">{key}</td><td className="langStyle">{Object.keys(reposLang[key]).map((lang, ind) => <span className="displaySpan"  key={lang}>{ (ind ? ', ' : '') + lang} </span>)}</td></tr>
         }
 
         return Object.keys(reposLang).map(repoAndLang);
@@ -109,7 +109,7 @@ class Repos extends React.Component {
                 {isEmpty(this.state.userRepos) ? "" : <img className="imgDisplay" src={isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.avatar_url}/>}
                 <h5>{isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.login}</h5>
             </Col>
-            <Col sm='5'>
+            <Col sm='6'>
                 {isEmpty(this.state.userRepoOnSelectLang) ? repoLangTable : repoOnSelectLangTable }
             </Col>
             <Col>

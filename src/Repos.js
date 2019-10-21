@@ -75,17 +75,17 @@ class Repos extends React.Component {
         }
 
         function repoAndLang(key) {
-            return <tr key={key}><td className="RepoBold">{key}</td><td className="langStyle">{Object.keys(reposLang[key]).map((lang, ind) => <span className="displaySpan"  key={lang}>{ (ind ? ', ' : '') + lang} </span>)}</td></tr>
+            return <tr key={key}><td className="RepoBold">{key}</td><td className="langStyle1">{Object.keys(reposLang[key]).map((lang, ind) => <span key={lang}>{ (ind ? ', ' : '') + lang} </span>)}</td></tr>
         }
 
         return Object.keys(reposLang).map(repoAndLang);
     }
 
     render() {
-        const repoLangTable =  <Table striped bordered hover>
+        const repoLangTable =  <Table className="repoListTable" striped hover>
                                 <tbody>{this.renderRepos(this.state.userRepoWithLang)}</tbody>
                                 </Table>;
-        const repoOnSelectLangTable =  <Table striped bordered hover>
+        const repoOnSelectLangTable =  <Table className="repoListTable" striped hover>
                                 <tbody>{this.renderRepos(this.state.userRepoOnSelectLang)}</tbody>
                                 </Table>;
         return <Container className="containerClass">
@@ -109,7 +109,7 @@ class Repos extends React.Component {
                 {isEmpty(this.state.userRepos) ? "" : <img className="imgDisplay" src={isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.avatar_url}/>}
                 <h5>{isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.login}</h5>
             </Col>
-            <Col sm='6'>
+            <Col sm='7'>
                 {isEmpty(this.state.userRepoOnSelectLang) ? repoLangTable : repoOnSelectLangTable }
             </Col>
             <Col>

@@ -13,6 +13,12 @@ form {
     padding: .300rem .75rem;
 }
 
+.table {
+    table-layout: fixed;
+}
+
+
+
 .hd {
     text-align: left;
     padding-left: 50px;
@@ -24,6 +30,7 @@ form {
 
 .RepoBold {
     font-weight: bold;
+    border-right: 2px solid green;
 }
 
 .formControl {
@@ -31,11 +38,16 @@ form {
     margin-top: 10px;
 }
 
-.langStyle {
-    line-height: 1px;
-    font-size: 10px;
-    min-width: 170px;
+.langStyle1 {
+    font-size: 13px;
+}
 
+span {
+    color: darkslateblue;
+}
+
+.col {
+    flex-grow: 0;
 }
 
 .imgLeft {
@@ -48,9 +60,7 @@ form {
     padding-bottom: 10px;
     padding-top: 10px;
 }
-.ReposLangStyle {
-    line-height: 1px;
-}
+
 .renderRepos {
     font-size: 10px;
 }

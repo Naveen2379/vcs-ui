@@ -33,10 +33,9 @@ class Trending extends React.Component{
 
     showTrendingRepos() {
 
-        function showRepo(repo, ind) {
+        /*function showRepo(repo, ind) {
             console.log(repo);
-            const tableData = <td key={repo.name} sm="5">
-                <td sm='1'>
+            const tableData = <td width='500px'><td sm='1'>
                     <img className="img" height="100px" width="100px" src={repo.avatar}/>
                 </td>
                 <td>
@@ -46,18 +45,22 @@ class Trending extends React.Component{
                         <Row><td width="350px">{repo.stars}</td></Row>
                         <Row><td width="350px">{repo.language}</td></Row>
                     </Col>
-                </td>
-            </td>
-           /* tableDataArr.push(repo);
-            console.log(tableDataArr);*/
-            return <tr>{tableData}</tr>
-        }
-
-    //tableDataArr.push(repo);
-        //console.log(tableDataArr);
+                </td></td>
+            return <td>{tableData}</td>
+        }*/
 
         return (
-            <tbody className="tableStyle">{this.state.trendRepo.map((repo, ind) => showRepo(repo, ind))}</tbody>
+            <section>{this.state.trendRepo.map((repo, ind) =>
+                    <article className="descArticle">
+                    <img className="img" height="100px" width="100px" src={repo.avatar}/>
+                    <Col className="repoDetails">
+                        <Row><td width='350px'><b>Repo- {repo.name}</b></td></Row>
+                        <Row><td width='350px'>Author- {repo.author}</td></Row>
+                        <Row><td width='350px'>Stars- {repo.stars}</td></Row>
+                        <Row><td width='350px'>Language- {repo.language}</td></Row>
+                    </Col>
+            </article>
+            )}</section>
         );
     }
 
@@ -65,9 +68,7 @@ class Trending extends React.Component{
 
     render() {
         return (
-            <Table striped hovered>
-                {isEmpty(this.state.trendRepo) ? "": this.showTrendingRepos()}
-            </Table>
+            <div>{isEmpty(this.state.trendRepo) ? "": this.showTrendingRepos()}</div>
         );
     }
 }

@@ -89,7 +89,7 @@ class Repos extends React.Component {
                                 <tbody>{this.renderRepos(this.state.userRepoOnSelectLang)}</tbody>
                                 </Table>;
         return <Container className="containerClass">
-            <Row className="rowClass">
+            <Row className="rowClass1">
                 <Form>
                     <Form.Group as={Row}>
                         <Col sm="8">
@@ -104,10 +104,11 @@ class Repos extends React.Component {
             <Row className="tableAdjust">
                     {isEmpty(this.state.userRepos) ? <Trending />: ""}
             </Row>
-            <Row className="imgRepos">
+            <Row className="imgRepos1">
+
             <Col className="imgLeft">
                 {isEmpty(this.state.userRepos) ? "" : <img className="imgDisplay" src={isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.avatar_url}/>}
-                <h5>{isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.login}</h5>
+                <h5 style={{textAlign:"center"}}>{isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.login}</h5>
             </Col>
             <Col sm='7'>
                 {isEmpty(this.state.userRepoOnSelectLang) ? repoLangTable : repoOnSelectLangTable }

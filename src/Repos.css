@@ -1,8 +1,11 @@
-.rowClass {
-    background-color: darkgray;
+.rowClass1 {
+    background-color: #10253f;
+    border-radius: 5px;
+    position: fixed;
+    z-index: 50;
+    width: 1110px;
     padding-bottom: 10px;
     padding-top: 20px;
-    border-radius: 5px;
 }
 
 form {
@@ -10,11 +13,14 @@ form {
 }
 
 .btn {
-    padding: .300rem .75rem;
+    background-color: navy;
+    border: #007bff;
 }
 
-.table {
+.repoListTable {
     table-layout: fixed;
+    border-radius: 10px;
+    background-color: deepskyblue;
 }
 
 
@@ -30,7 +36,7 @@ form {
 
 .RepoBold {
     font-weight: bold;
-    border-right: 2px solid green;
+    border-right: 2px solid darkseagreen;
 }
 
 .formControl {
@@ -54,11 +60,13 @@ span {
     text-align: left !important;
 }
 
-.imgRepos {
-    background-color: palegoldenrod;
+.imgRepos1 {
+    background-color: gainsboro;
     max-width: 100%;
+    min-height: 620px;
     padding-bottom: 10px;
     padding-top: 10px;
+    border-radius: 10px;
 }
 
 .renderRepos {
@@ -69,7 +77,7 @@ span {
     height: 200px;
     width: 200px;
     border-style: solid;
-    border-color: lightblue;    
+    border-color: lightblue;
 }
 
 .col-form-label {

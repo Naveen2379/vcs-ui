@@ -104,7 +104,7 @@ class Repos extends React.Component {
             <Row className="tableAdjust">
                     {isEmpty(this.state.userRepos) ? <Trending />: ""}
             </Row>
-            <Row className="imgRepos1">
+            <Row>
 
             <Col className="imgLeft">
                 {isEmpty(this.state.userRepos) ? "" : <img className="imgDisplay" src={isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.avatar_url}/>}

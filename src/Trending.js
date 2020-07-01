@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Col, Row, Table} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 import {isEmpty} from "lodash";
 import "./Trending.css";
 
@@ -15,7 +15,6 @@ class Trending extends React.Component{
         this.showTrendingRepos = this.showTrendingRepos.bind(this);
 
     }
-
     componentDidMount() {
         this.trendingRepos();
     }
@@ -24,31 +23,14 @@ class Trending extends React.Component{
         const trendRepoUrl = 'https://github-trending-api.now.sh/repositories';
         fetch(trendRepoUrl)
             .then(response => response.json())
-            .then(json => {
+            .then(result => {
                 this.setState({
-                    trendRepo: json
+                    trendRepo: result
                 });
             });
     }
 
     showTrendingRepos() {
-
-        /*function showRepo(repo, ind) {
-            console.log(repo);
-            const tableData = <td width='500px'><td sm='1'>
-                    <img className="img" height="100px" width="100px" src={repo.avatar}/>
-                </td>
-                <td>
-                    <Col className="repoDetails">
-                        <Row><td width="350px"><b>{repo.name}</b></td></Row>
-                        <Row><td width="350px">{repo.author}</td></Row>
-                        <Row><td width="350px">{repo.stars}</td></Row>
-                        <Row><td width="350px">{repo.language}</td></Row>
-                    </Col>
-                </td></td>
-            return <td>{tableData}</td>
-        }*/
-
         return (
             <section>{this.state.trendRepo.map((repo, ind) =>
                     <article className="descArticle">
@@ -63,8 +45,6 @@ class Trending extends React.Component{
             )}</section>
         );
     }
-
-
 
     render() {
         return (

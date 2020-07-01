@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {isEmpty, reduce, extend, pickBy} from "lodash"
-import { Button, Form, FormControl, FormGroup, FormLabel, Col, Row, Container, Table,  Dropdown, DropdownButton} from 'react-bootstrap';
+import { Button, Form, Col, Row, Container, Table,  Dropdown, DropdownButton} from 'react-bootstrap';
 import './Repos.css';
 import Trending from "./Trending";
 
@@ -35,8 +35,9 @@ export default class Repos extends React.Component {
 
     saveUserRepos(jsonResp) {
         console.log(jsonResp);
-        if(!isEmpty(jsonResp)) {
-            console.log('not empty');
+        console.log(this.state.userRepos);
+        if(Array.isArray(jsonResp)) {
+            console.log('in if');
             Promise.all(
                 jsonResp.map(userRepo => fetch(userRepo.languages_url)
                     .then(response => {
@@ -45,6 +46,7 @@ export default class Repos extends React.Component {
                             return {[userRepo.name]: languages}
                         })
                     })
+                    .catch(err => console.log(err))
                 )
             ).then(data => {
                 console.log(data);
@@ -53,20 +55,20 @@ export default class Repos extends React.Component {
                 const languages = Object.values(newData).map(language => Object.keys(language)).flatMap(x => x);
                 const uniqueLang = Array.from(new Set(languages));
                 this.setState({languages: uniqueLang});
-                this.setState({userRepoWithLang: newData, userRepoOnSelectLang: ""});
+                this.setState({userRepoWithLang: newData, userRepoOnSelectLang: ""}, () => console.log(this.state.userRepoWithLang));
             });
+            this.setState(
+                {
+                    userRepos: jsonResp,
+                    userNotFound: false,
+                }, () => { console.log(this.state.userRepos); console.log(this.state.message)});
         }
         else {
-            console.log('empty');
+            console.log('in else');
             this.setState({
                 userNotFound: true
-            })
+            }, () => console.log(this.state.userNotFound));
         }
-        this.setState(
-            {
-                userRepos: jsonResp,
-            }
-        );
     }
 
     fetchReposAPI() {
@@ -78,28 +80,54 @@ export default class Repos extends React.Component {
             return response.json();
         })
             .then(this.saveUserRepos)
-            .catch(err=>console.log(err));
+            //.catch(err=>console.log(err, ' ERROR'));
     }
 
     renderRepos(reposLang) {
         if(isEmpty(reposLang)) {
-            return ""
+            return "";
         }
 
         function repoAndLang(key) {
-            return <tr key={key}><td className="RepoBold">{key}</td><td className="langStyle1">{Object.keys(reposLang[key]).map((lang, ind) => <span key={lang}>{ (ind ? ', ' : '') + lang} </span>)}</td></tr>
+            console.log(key);
+            console.log(reposLang[key]);
+            console.log(Object.keys(reposLang[key]));
+            return <tr key={key}>
+                <td className="RepoBold">{key}</td>
+                <td className="langStyle1">{Object.keys(reposLang[key]).map((lang, ind) => <span key={lang}>{ (ind ? ', ' : '') + lang} </span>)}</td>
+            </tr>
         }
-
+        console.log(reposLang);
+        console.log(Object.keys(reposLang));
         return Object.keys(reposLang).map(repoAndLang);
     }
 
     render() {
+        console.log(this.state.languages);
         const repoLangTable =  <Table className="repoListTable" striped hover>
                                 <tbody>{this.renderRepos(this.state.userRepoWithLang)}</tbody>
                                 </Table>;
         const repoOnSelectLangTable =  <Table className="repoListTable" striped hover>
                                 <tbody>{this.renderRepos(this.state.userRepoOnSelectLang)}</tbody>
                                 </Table>;
+        const userReposWithLanguages = <React.Fragment>{this.state.userNotFound ? <h5>user not found</h5> : <React.Fragment>
+                <Col className="imgLeft">
+                    {isEmpty(this.state.userRepos) ? "" : <img className="imgDisplay" src={isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.avatar_url}/>}
+                    <h5 style={{textAlign:"center"}}>{isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.login}</h5>
+                </Col>
+                <Col sm='7'>
+                    {isEmpty(this.state.userRepoOnSelectLang) ? repoLangTable : repoOnSelectLangTable }
+                </Col>
+                <Col>
+                    {isEmpty(this.state.languages) ? "" : <DropdownButton id="dropdown-item-button" title="Choose Language">
+                        {this.state.languages.map(language =>
+                            <Dropdown.Item as="button" className="colorBtn" key={language}
+                                           onSelect={() => this.onSelectDropdown(language)}>{language}
+                            </Dropdown.Item>)
+                        }
+                    </DropdownButton>}
+                </Col>
+        </React.Fragment>}</React.Fragment>;
         return <Container className="containerClass">
             <Row className="rowClass1">
                 <Form>
@@ -114,30 +142,10 @@ export default class Repos extends React.Component {
                 </Form>
             </Row>
             <Row className="tableAdjust">
-                    {isEmpty(this.state.userRepos) ? <Trending />: ""}
+                    {isEmpty(this.state.userRepos)  ? <Trending />: <React.Fragment>{userReposWithLanguages}</React.Fragment>}
             </Row>
-            <Row>
-            <Col className="imgLeft">
-                {this.state.userNotFound ? <h5>user not found</h5> : ''}
-                {isEmpty(this.state.userRepos) ? "" : <img className="imgDisplay" src={isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.avatar_url}/>}
-                <h5 style={{textAlign:"center"}}>{isEmpty(this.state.userRepos) ? "" : this.state.userRepos[0].owner.login}</h5>
-            </Col>
-            <Col sm='7'>
-                {isEmpty(this.state.userRepoOnSelectLang) ? repoLangTable : repoOnSelectLangTable }
-            </Col>
-            <Col>
-                {isEmpty(this.state.languages) ? "" : <DropdownButton id="dropdown-item-button" title="Choose Language">
-                    {this.state.languages.map(language =>
-                        <Dropdown.Item as="button" className="colorBtn" key={language}
-                                       onSelect={() => this.onSelectDropdown(language)}>{language}
-                        </Dropdown.Item>)
-                    }
-                </DropdownButton>}
 
-            </Col>
-            </Row>
         </Container>
-
     }
 
     onSelectDropdown(language) {
@@ -146,8 +154,4 @@ export default class Repos extends React.Component {
         });
         this.setState({userRepoOnSelectLang: newReposWithLang});
     }
-}
-
-function convertJSON(response) {
-    return response.json();
 }

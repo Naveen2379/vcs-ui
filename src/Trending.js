@@ -20,7 +20,9 @@ class Trending extends React.Component{
     }
 
     trendingRepos() {
-        const trendRepoUrl = 'https://github-trending-api.now.sh/repositories';
+        /* previously used Trending reposiroty API URL */
+        //const trendRepoUrl = 'https://github-trending-api.now.sh/repositories';
+        const trendRepoUrl = 'https://private-anon-8b5052aa0c-githubtrendingapi.apiary-proxy.com/developers';
         fetch(trendRepoUrl)
             .then(response => response.json())
             .then(result => {
@@ -32,22 +34,24 @@ class Trending extends React.Component{
 
     showTrendingRepos() {
         return (
-            <section>{this.state.trendRepo.map((repo, ind) =>
+            <section>{this.state.trendRepo.map((userRepo, ind) =>
+                <React.Fragment key={userRepo.name}>
                     <article className="descArticle">
-                    <img className="img" height="100px" width="100px" src={repo.avatar}/>
-                    <Col className="repoDetails">
-                        <Row><td width='350px'><b>Repo- {repo.name}</b></td></Row>
-                        <Row><td width='350px'>Author- {repo.author}</td></Row>
-                        <Row><td width='350px'>Stars- {repo.stars}</td></Row>
-                        <Row><td width='350px'>Language- {repo.language}</td></Row>
-                    </Col>
-            </article>
+                        <img className="img" height="100px" width="100px" alt='avatar not displayed' src={userRepo.avatar}/>
+                        <Col className="repoDetails">
+                            <Row><td width='350px'><b>{userRepo.name}</b></td></Row>
+                            <Row><td width='350px'><b>Author: </b>{userRepo.username}</td></Row>
+                            <Row><td width='350px'><b>Repo Name: </b>{userRepo.repo.name}</td></Row>
+                            <Row><td width='350px'><b>URL: </b><a href={userRepo.repo.url}>{userRepo.repo.url}</a></td></Row>
+                        </Col>
+                    </article>
+                </React.Fragment>
             )}</section>
         );
     }
 
     render() {
-        return (
+        return  (
             <div>{isEmpty(this.state.trendRepo) ? "": this.showTrendingRepos()}</div>
         );
     }

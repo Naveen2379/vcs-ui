@@ -46,7 +46,7 @@ article {
 }
 .tableAdjust {
     width: 1110px;
-    padding-top: 84px;
+    padding-top: 85px;
 }
 
 .repoDetails {
@@ -54,6 +54,9 @@ article {
     padding-left: 50px;
 }
 
-.img {
+img {
     border-radius: 5px;
+}
+a {
+    color: dodgerblue;
 }

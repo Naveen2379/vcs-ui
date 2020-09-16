@@ -2,7 +2,7 @@ import React from 'react';
 
 import {isEmpty, reduce, extend, pickBy} from "lodash"
 import { Button, Form, Col, Row, Container, Table,  Dropdown, DropdownButton} from 'react-bootstrap';
-import './Repos.css';
+import '../styles/Repos.css';
 import Trending from "./Trending";
 
 export default class Repos extends React.Component {
@@ -14,7 +14,8 @@ export default class Repos extends React.Component {
             userRepoWithLang: {},
             userRepoOnSelectLang: {},
             languages: [],
-            userNotFound: false
+            userNotFound: false,
+            errorMsg: ''
         };
         this.userInput = this.userInput.bind(this);
         this.constructUrlForUsername = this.constructUrlForUsername.bind(this);
@@ -25,26 +26,33 @@ export default class Repos extends React.Component {
     }
 
     userInput(event) {
-        this.setState({userName: event.target.value});
+        this.setState({userName: event.target.value},
+            () => {
+            if(this.state.userName === '') {
+                this.setState({
+                    userRepos: []
+                })
+            }});
     }
 
     constructUrlForUsername() {
-        return "http://api.github.com/users/" + this.state.userName + "/repos";
+        return "http://api.github.com/users/" + this.state.userName + "/reposss";
     }
 
     saveUserRepos(jsonResp) {
         if(jsonResp.message === 'Not Found') {
             this.setState({
-                userNotFound: !this.state.userNotFound,
+                userNotFound: true,
                 userRepos: []
             });
         }
         else {
-            if(Array.isArray(jsonResp)) {
+            if(!isEmpty(jsonResp)) {
                 Promise.all(
                     jsonResp.map(userRepo => fetch(userRepo.languages_url)
                         .then(response => {
                             return response.json().then(languages => {
+                                console.log(languages);
                                 return {[userRepo.name]: languages}
                             })
                         })
@@ -73,13 +81,17 @@ export default class Repos extends React.Component {
 
     fetchReposAPI() {
         fetch(
-            this.constructUrlForUsername()
-        )
+            this.constructUrlForUsername())
             .then(response=> {
-            return response.json();
-        })
+                return response.json();
+            })
             .then(this.saveUserRepos)
-            .catch(err=>console.log(err, ' ERROR: '+err));
+            .catch( err => {
+                console.log(err);
+                return this.setState({
+                    errorMsg: err
+                });
+            })
     }
 
     renderRepos(reposLang) {
@@ -94,6 +106,13 @@ export default class Repos extends React.Component {
             </tr>
         }
         return Object.keys(reposLang).map(repoAndLang);
+    }
+
+    onSelectDropdown(language) {
+        const newReposWithLang = pickBy(this.state.userRepoWithLang, function(value, key, object) {
+            return Object.keys(value).includes(language);
+        });
+        this.setState({userRepoOnSelectLang: newReposWithLang});
     }
 
     render() {
@@ -121,39 +140,37 @@ export default class Repos extends React.Component {
                     </DropdownButton>}
                 </Col>
         </React.Fragment>;
-        return <Container className="containerClass">
-            <Row className="rowClass1">
-                <Form>
-                    <Form.Group as={Row}>
-                        <Col sm="8">
-                        <Form.Control type="text" placeholder="enter github username..." onChange={this.userInput}/>
-                        </Col>
-                        <Col sm="2">
-                            <Button variant="primary" size="md" onClick={this.fetchReposAPI}>Submit</Button>
-                        </Col>
-                    </Form.Group>
-                </Form>
-            </Row>
-            <Row className="tableAdjust">
-                {this.state.userNotFound ? <React.Fragment>
-                        <div className='user-not-found-message'>
-                            <p>User Not Found</p>
-                            <p>Please enter valid gitHub username</p>
-                        </div>
-                        <Trending />
-                    </React.Fragment>
-                    : <React.Fragment>
-                        {isEmpty(this.state.userRepos) ? <Trending /> : <React.Fragment>{userReposWithLanguages}</React.Fragment>}
-                    </React.Fragment>
-                }
-            </Row>
-        </Container>
-    }
-
-    onSelectDropdown(language) {
-        const newReposWithLang = pickBy(this.state.userRepoWithLang, function(value, key, object) {
-            return Object.keys(value).includes(language);
-        });
-        this.setState({userRepoOnSelectLang: newReposWithLang});
+        return (
+            <Container className="containerClass">
+                <Row className="rowClass1">
+                    <Form>
+                        <Form.Group as={Row}>
+                            <Col sm="8">
+                                <Form.Control type="text" placeholder="enter github username..." onChange={this.userInput}/>
+                            </Col>
+                            <Col sm="2">
+                                <Button variant="primary" size="md" onClick={this.fetchReposAPI}>Submit</Button>
+                            </Col>
+                        </Form.Group>
+                    </Form>
+                </Row>
+                <Row className="tableAdjust">
+                    {
+                        this.state.errorMsg ? <h1 style={{marginLeft: "350px", color: "red"}}>something went wrong!!!</h1> :
+                        (
+                            this.state.userNotFound ?  <React.Fragment>
+                                <div className='user-not-found-message'>
+                                    <p>Please enter valid gitHub username</p>
+                                </div>
+                                <Trending />
+                            </React.Fragment>
+                            : <React.Fragment>
+                                {isEmpty(this.state.userRepos) ? <Trending /> : <React.Fragment>{userReposWithLanguages}</React.Fragment>}
+                            </React.Fragment>
+                        )
+                    }
+                </Row>
+            </Container>
+        )
     }
 }

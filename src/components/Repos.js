@@ -30,13 +30,14 @@ export default class Repos extends React.Component {
             () => {
             if(this.state.userName === '') {
                 this.setState({
-                    userRepos: []
+                    userRepos: [],
+                    userNotFound: false
                 })
             }});
     }
 
     constructUrlForUsername() {
-        return "http://api.github.com/users/" + this.state.userName + "/reposss";
+        return "http://api.github.com/users/" + this.state.userName + "/repos";
     }
 
     saveUserRepos(jsonResp) {
@@ -52,7 +53,6 @@ export default class Repos extends React.Component {
                     jsonResp.map(userRepo => fetch(userRepo.languages_url)
                         .then(response => {
                             return response.json().then(languages => {
-                                console.log(languages);
                                 return {[userRepo.name]: languages}
                             })
                         })
@@ -87,7 +87,6 @@ export default class Repos extends React.Component {
             })
             .then(this.saveUserRepos)
             .catch( err => {
-                console.log(err);
                 return this.setState({
                     errorMsg: err
                 });

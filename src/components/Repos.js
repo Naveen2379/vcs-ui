@@ -37,7 +37,7 @@ export default class Repos extends React.Component {
     }
 
     constructUrlForUsername() {
-        return "http://api.github.com/users/" + this.state.userName + "/repos";
+        return "https://api.github.com/users/" + this.state.userName + "/repos";
     }
 
     saveUserRepos(jsonResp) {

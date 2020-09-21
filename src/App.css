@@ -2,6 +2,7 @@
   text-align: center;
   background-color: white;
   min-height: auto;
+  /*filter: invert(1) hue-rotate(180deg);*/  /*invert any website into dark/light mode*/
 }
 
 .App-logo {

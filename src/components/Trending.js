@@ -28,7 +28,7 @@ class Trending extends React.Component{
         fetch(trendRepoUrl)
             .then(response => response.json())
             .then(result => {
-                this.setState({
+                return this.setState({
                     trendRepo: result
                 });
             })
